@@ -135,29 +135,27 @@
           <!-- Phone Number -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">No. Telepon *</label>
-            <input formControlName="phoneNumber" type="text" maxlength="13" (keydown)="limitDigits($event, 13)"
+            <input formControlName="phoneNumber" type="text" minlength="11" maxlength="13" (keydown)="limitDigits($event, 13)"
               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all"
-              placeholder="08xxxxxxxxxx"
+              placeholder="Contoh: 081234567890"
               [class.border-red-500]="profileForm.get('phoneNumber')?.touched && profileForm.get('phoneNumber')?.invalid">
-            <div *ngIf="profileForm.get('phoneNumber')?.touched && profileForm.get('phoneNumber')?.invalid" class="text-red-500 text-xs mt-1">
+            <div *ngIf="profileForm.get('phoneNumber')?.invalid && (profileForm.get('phoneNumber')?.dirty || profileForm.get('phoneNumber')?.touched)" class="text-red-500 text-xs mt-1">
               <span *ngIf="profileForm.get('phoneNumber')?.errors?.['required']">Nomor telepon wajib diisi.</span>
-              <span *ngIf="profileForm.get('phoneNumber')?.errors?.['pattern']">Nomor HP harus diawali '08' atau '8' dengan panjang 10-13 digit.</span>
+              <span *ngIf="profileForm.get('phoneNumber')?.errors?.['pattern'] || profileForm.get('phoneNumber')?.errors?.['minlength'] || profileForm.get('phoneNumber')?.errors?.['maxlength']">Nomor HP wajib diawali '08' dan terdiri dari 11-13 digit angka tanpa spasi.</span>
             </div>
           </div>
 
           <!-- Blood Type -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Golongan Darah *</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Golongan Darah (Opsional)</label>
             <select formControlName="bloodType"
-              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all"
-              [class.border-red-500]="profileForm.get('bloodType')?.touched && profileForm.get('bloodType')?.invalid">
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all">
               <option value="">Pilih...</option>
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="AB">AB</option>
               <option value="O">O</option>
             </select>
-            <div *ngIf="profileForm.get('bloodType')?.touched && profileForm.get('bloodType')?.invalid" class="text-red-500 text-xs mt-1">Golongan darah wajib diisi.</div>
           </div>
 
           <!-- Identity Number (NIK) -->
@@ -193,6 +191,7 @@
               [class.border-red-500]="profileForm.get('province')?.touched && profileForm.get('province')?.invalid">
               <option value="">Pilih Provinsi...</option>
               <option *ngFor="let p of provinces" [value]="p.name">{{ p.name }}</option>
+              <option value="LAINNYA">Daerah Lainnya</option>
             </select>
             <div *ngIf="profileForm.get('province')?.touched && profileForm.get('province')?.invalid" class="text-red-500 text-xs mt-1">Provinsi wajib dipilih.</div>
           </div>
@@ -205,6 +204,7 @@
               [class.border-red-500]="profileForm.get('city')?.touched && profileForm.get('city')?.invalid">
               <option value="">Pilih Kota/Kab...</option>
               <option *ngFor="let c of citiesList" [value]="c">{{ c }}</option>
+              <option value="LAINNYA">Daerah Lainnya</option>
             </select>
             <div *ngIf="profileForm.get('city')?.touched && profileForm.get('city')?.invalid" class="text-red-500 text-xs mt-1">Kota/Kabupaten wajib dipilih.</div>
           </div>
@@ -217,6 +217,7 @@
               [class.border-red-500]="profileForm.get('district')?.touched && profileForm.get('district')?.invalid">
               <option value="">Pilih Kecamatan...</option>
               <option *ngFor="let d of districtsList" [value]="d">{{ d }}</option>
+              <option value="LAINNYA">Daerah Lainnya</option>
             </select>
             <div *ngIf="profileForm.get('district')?.touched && profileForm.get('district')?.invalid" class="text-red-500 text-xs mt-1">Kecamatan wajib dipilih.</div>
           </div>

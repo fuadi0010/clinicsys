@@ -104,24 +104,15 @@ public class PatientServiceImpl implements PatientService {
             return null;
         }
         String clean = rawPhone.replaceAll("[^0-9]", "");
-        if (clean.startsWith("0")) {
-            clean = clean.substring(1);
-        } else if (clean.startsWith("62")) {
-            clean = clean.substring(2);
+        if (clean.startsWith("62")) {
+            clean = "0" + clean.substring(2);
+        } else if (clean.startsWith("8")) {
+            clean = "0" + clean;
         }
-        if (!clean.matches("^8[0-9]{8,12}$")) {
-            throw new BadRequestException("Format nomor telepon tidak valid. Harus diawali dengan 08 atau 8 dan memiliki panjang 10-13 digit angka.");
+        if (!clean.matches("^08[0-9]{9,11}$")) {
+            throw new BadRequestException("Format nomor telepon tidak valid. Harus diawali dengan 08 atau 8 dan memiliki panjang 11-13 digit angka.");
         }
-        String p1 = clean.substring(0, 3);
-        String p2 = clean.substring(3, Math.min(7, clean.length()));
-        String p3 = clean.length() > 7 ? clean.substring(7) : "";
-        
-        StringBuilder formatted = new StringBuilder("+62 ");
-        formatted.append(p1).append(" ").append(p2);
-        if (!p3.isEmpty()) {
-            formatted.append(" ").append(p3);
-        }
-        return formatted.toString();
+        return clean;
     }
 
     @Override

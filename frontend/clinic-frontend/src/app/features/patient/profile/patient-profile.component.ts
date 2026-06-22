@@ -121,13 +121,13 @@ export class PatientProfileComponent implements OnInit {
     fullName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s',.-]+$/)]],
     gender: ['', Validators.required],
     birthDate: ['', Validators.required],
-    phoneNumber: ['', [Validators.required, Validators.pattern(/^(08[0-9]{8,11}|8[0-9]{9,12})$/)]],
+    phoneNumber: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(13), Validators.pattern(/^08[0-9]{9,11}$/)]],
     address: [''],
     streetDetail: ['', Validators.required],
     province: ['', Validators.required],
     city: ['', Validators.required],
     district: ['', Validators.required],
-    bloodType: ['', Validators.required],
+    bloodType: [''],
     identityNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
     allergyNotes: [''],
     insuranceNumber: [''],
@@ -294,17 +294,27 @@ export class PatientProfileComponent implements OnInit {
       next: profile => {
         this.hasProfile = true;
         const addrParsed = this.parseAddress(profile.address);
+        let cleanPhone = profile.phoneNumber || '';
+        if (cleanPhone) {
+          cleanPhone = cleanPhone.replace(/[^0-9]/g, '');
+          if (cleanPhone.startsWith('62')) {
+            cleanPhone = '0' + cleanPhone.substring(2);
+          } else if (cleanPhone.startsWith('8')) {
+            cleanPhone = '0' + cleanPhone;
+          }
+        }
+
         this.profileForm.patchValue({
           fullName: profile.fullName,
           gender: profile.gender,
           birthDate: profile.birthDate,
-          phoneNumber: profile.phoneNumber,
+          phoneNumber: cleanPhone,
           address: profile.address,
           streetDetail: addrParsed.streetDetail,
           province: addrParsed.province,
           city: addrParsed.city,
           district: addrParsed.district,
-          bloodType: profile.bloodType,
+          bloodType: profile.bloodType || '',
           identityNumber: profile.identityNumber || '',
           allergyNotes: profile.allergyNotes || '',
           insuranceNumber: profile.insuranceNumber || '',
@@ -355,7 +365,7 @@ export class PatientProfileComponent implements OnInit {
       fullName: rawVal.fullName,
       gender: rawVal.gender,
       birthDate: rawVal.birthDate,
-      bloodType: rawVal.bloodType,
+      bloodType: rawVal.bloodType || null,
       phoneNumber: rawVal.phoneNumber,
       address: fullAddress,
       insuranceNumber: rawVal.insuranceNumber ? rawVal.insuranceNumber.trim() : null,

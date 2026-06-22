@@ -45,9 +45,7 @@ export class MyAppointmentsComponent implements OnInit {
   tabs = [
     { key: 'all', label: 'Semua' },
     { key: 'UNPAID', label: 'Belum Bayar' },
-    { key: 'SCHEDULED', label: 'Terjadwal' },
-    { key: 'COMPLETED', label: 'Selesai' },
-    { key: 'CANCELLED', label: 'Dibatalkan' }
+    { key: 'COMPLETED', label: 'Selesai' }
   ];
 
   ngOnInit(): void {
