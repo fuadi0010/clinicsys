@@ -1,0 +1,39 @@
+# ===============================
+# APPLICATION
+# ===============================
+spring.application.name=patient-service
+server.port=8082
+
+# ===============================
+# DATABASE (ZERO-LEAK PLACEHOLDERS)
+# ===============================
+spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/clinic_patient}
+spring.datasource.username=${DB_USERNAME:YOUR_DATABASE_USERNAME_HERE}
+spring.datasource.password=${DB_PASSWORD:YOUR_DATABASE_PASSWORD_HERE}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# ===============================
+# JPA / HIBERNATE
+# ===============================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.open-in-view=false
+
+# ===============================
+# SECURITY & JWT (ZERO-LEAK PLACEHOLDER)
+# ===============================
+# Ganti dengan secret key HMAC-SHA 256/512 acak minimal 32/64 karakter alfanumerik.
+jwt.secret-key=${JWT_SECRET_KEY:YOUR_SECURE_RANDOM_SECRET_KEY_MIN_32_CHARS}
+
+# ===============================
+# FILE UPLOAD
+# ===============================
+spring.servlet.multipart.max-file-size=5MB
+spring.servlet.multipart.max-request-size=10MB
+
+# ===============================
+# LOGGING
+# ===============================
+logging.level.org.springframework.security=DEBUG

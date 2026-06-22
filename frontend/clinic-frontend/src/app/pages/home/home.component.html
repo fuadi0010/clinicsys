@@ -1,0 +1,498 @@
+<app-navbar />
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-blue-50 via-white to-sky-50 py-20 px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="space-y-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase tracking-wider">
+        <i class="bi bi-shield-check"></i> Mitra Kesehatan Keluarga Terpercaya
+      </div>
+      <h1 class="text-4xl lg:text-5xl font-black text-slate-950 leading-tight">
+        Professional Healthcare <br class="hidden sm:inline">For You And Your Family
+      </h1>
+      <p class="text-base lg:text-lg text-slate-600 leading-relaxed">
+        Book appointments, consult experienced doctors, and access your medical records through a modern healthcare platform.
+      </p>
+      
+      <div class="flex flex-wrap gap-4 pt-2">
+        <a routerLink="/register" class="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:scale-[1.02] transition-all">Book Appointment</a>
+        <a routerLink="/doctors" class="px-8 py-4 bg-white text-slate-800 border border-slate-200 font-bold rounded-xl hover:bg-slate-50 transition-all">View Doctors</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-4 pt-10 border-t border-slate-100">
+        <div>
+          <h3 class="text-2xl lg:text-3xl font-black text-blue-600">20+</h3>
+          <p class="text-xs text-slate-500 font-bold mt-1">Total Doctors</p>
+        </div>
+        <div>
+          <h3 class="text-2xl lg:text-3xl font-black text-blue-600">5k+</h3>
+          <p class="text-xs text-slate-500 font-bold mt-1">Happy Patients</p>
+        </div>
+        <div>
+          <h3 class="text-2xl lg:text-3xl font-black text-blue-600">10+</h3>
+          <p class="text-xs text-slate-500 font-bold mt-1">Years Experience</p>
+        </div>
+        <div>
+          <h3 class="text-2xl lg:text-3xl font-black text-blue-600">100%</h3>
+          <p class="text-xs text-slate-500 font-bold mt-1">Secure Records</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="relative flex justify-center w-full max-w-[480px] mx-auto">
+      <div class="absolute -top-12 -left-12 w-64 h-64 bg-blue-100/40 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-sky-100/50 rounded-full blur-3xl animate-pulse"></div>
+      <div class="relative w-full aspect-[4/5] bg-gradient-to-tr from-blue-600 via-blue-500 to-sky-400 rounded-[32px] shadow-2xl p-8 flex flex-col justify-between overflow-hidden group hover:scale-[1.01] transition-transform duration-500">
+        <!-- Background Pattern -->
+        <svg class="absolute inset-0 w-full h-full opacity-10 text-white" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 0 0 0 30" fill="none" stroke="currentColor" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+        <!-- Floating Elements inside card -->
+        <div class="relative z-10 flex justify-between items-start">
+          <div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 text-white text-xs font-bold flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-ping"></span>
+            Layanan Aktif 24/7
+          </div>
+          <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center text-white text-xl">
+            <i class="bi bi-heart-pulse"></i>
+          </div>
+        </div>
+        
+        <div class="relative z-10 flex flex-col items-center justify-center py-10">
+          <svg class="w-40 h-40 text-white/90 drop-shadow-lg animate-bounce" style="animation-duration: 4s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+        </div>
+
+        <div class="relative z-10 bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/20 text-white">
+          <p class="font-extrabold text-lg leading-snug">Mitra Manajemen Layanan Medis Tepercaya</p>
+          <p class="text-xs text-blue-100 mt-1">Kemudahan membuat janji temu dan akses riwayat kesehatan digital keluarga dalam satu klik.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-20 px-6 bg-white">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <div class="relative flex justify-center w-full max-w-[500px] mx-auto">
+      <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-blue-600 rounded-[24px] blur-2xl opacity-20"></div>
+      <div class="relative w-full aspect-[5/4] bg-slate-900 rounded-[24px] overflow-hidden border border-slate-800 p-8 flex flex-col justify-between shadow-xl">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-3.5 h-3.5 bg-red-500 rounded-full"></div>
+            <div class="w-3.5 h-3.5 bg-yellow-500 rounded-full"></div>
+            <div class="w-3.5 h-3.5 bg-green-500 rounded-full"></div>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">clinic_records_system.sys</span>
+        </div>
+        <div class="my-auto space-y-4">
+          <div class="flex items-center gap-4 bg-slate-800/40 border border-slate-800 p-4 rounded-xl">
+            <div class="w-10 h-10 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-lg flex-shrink-0">
+              <i class="bi bi-file-earmark-medical text-lg"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold text-white truncate">Rekam Medis Terenkripsi</p>
+              <p class="text-[10px] text-slate-400 truncate">SHA-256 Secured Data Integrity</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-800/40 border border-slate-800 p-4 rounded-xl">
+            <div class="w-10 h-10 bg-emerald-500/20 text-emerald-400 flex items-center justify-center rounded-lg flex-shrink-0">
+              <i class="bi bi-person-check text-lg"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold text-white truncate">Otorisasi Role-Based Terkendali</p>
+              <p class="text-[10px] text-slate-400 truncate">Hanya diakses Dokter & Pasien berwenang</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono">
+          <span>Status: Terlindungi</span>
+          <span>Security Level: High</span>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-sky-50 text-sky-600 font-bold text-xs rounded-full uppercase">
+        Tentang Klinik Kami
+      </div>
+      <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight">
+        Berdedikasi Memberikan Pelayanan Medis Kelas Dunia
+      </h2>
+      <p class="text-slate-600 leading-relaxed">
+        Clinic Management System hadir untuk memberikan kemudahan bagi pasien dalam mengakses layanan kesehatan berkualitas tinggi secara digital dan transparan.
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-shield-plus text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Trusted Healthcare</h4>
+            <p class="text-xs text-slate-500 mt-1">Sertifikasi kesehatan terpercaya untuk perlindungan Anda.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-person-badge text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Experienced Doctors</h4>
+            <p class="text-xs text-slate-500 mt-1">Ditangani oleh jajaran dokter spesialis berpengalaman luas.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-house-gear text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Modern Facilities</h4>
+            <p class="text-xs text-slate-500 mt-1">Fasilitas modern dengan teknologi diagnostik tercanggih.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-file-earmark-lock text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Digital Medical Records</h4>
+            <p class="text-xs text-slate-500 mt-1">Akses rekam medis digital terenkripsi kapan saja.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-20 px-6 bg-slate-50">
+  <div class="max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-4">
+      <span class="px-3.5 py-1.5 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">Layanan Unggulan</span>
+      <h2 class="text-3xl font-extrabold text-slate-900">Solusi Kesehatan Komprehensif Anda</h2>
+      <p class="text-slate-500 text-sm">Kami menyediakan berbagai layanan medis dengan standar operasional tinggi untuk kesembuhan optimal keluarga Anda.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Card 1 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-activity text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Konsultasi Umum</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Pemeriksaan kesehatan dasar rutin oleh dokter umum terpercaya untuk penanganan gejala medis awal.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-person-fill text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Internal Medicine (Penyakit Dalam)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Konsultasi dan penanganan spesifik untuk masalah organ tubuh dalam oleh dokter spesialis penyakit dalam.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-emoji-smile text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Pediatrics (Spesialis Anak)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Perawatan medis intensif, tumbuh kembang anak, imunisasi, dan pemantauan nutrisi oleh dokter spesialis anak.</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-heart-pulse text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Kardiologi (Jantung)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Skrining kesehatan jantung lengkap, EKG, konsultasi penyakit jantung koroner, dan perawatan kardiovaskular.</p>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-droplet-half text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Laboratorium Klinis</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Pengujian sampel darah lengkap, urine, kolesterol, glukosa, dan diagnosis laboratorium pendukung secara akurat.</p>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="bg-white p-8 rounded-[18px] border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i class="bi bi-prescription2 text-2xl"></i>
+        </div>
+        <h3 class="font-extrabold text-lg text-slate-900 mb-2">Farmasi & Apotek</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Penyediaan obat resep dokter terstandarisasi, suplemen kesehatan, dan konseling obat oleh apoteker berlisensi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Facilities Gallery Section -->
+<section class="py-20 px-6 bg-slate-50">
+  <div class="max-w-7xl mx-auto space-y-12">
+    <div class="text-center max-w-2xl mx-auto space-y-4">
+      <span class="px-3.5 py-1.5 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">Fasilitas Klinik</span>
+      <h2 class="text-3xl font-extrabold text-slate-900">Nikmati Kenyamanan Fasilitas Kami</h2>
+      <p class="text-slate-500 text-sm">Kami menyediakan fasilitas medis modern dan lingkungan yang nyaman untuk kesembuhan optimal Anda.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let f of facilities" class="bg-white border border-slate-100 p-6 rounded-card shadow-card hover:shadow-card-hover transition-all group">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all">
+          <i [class]="f.icon + ' text-xl'"></i>
+        </div>
+        <h3 class="font-bold text-slate-900 mb-2">{{ f.name }}</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">{{ f.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Doctors Section -->
+<section id="doctors" class="py-20 px-6 bg-white">
+  <div class="max-w-7xl mx-auto space-y-12">
+    <div class="flex items-end justify-between">
+      <div class="space-y-3">
+        <span class="px-3 py-1 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">Dokter Berpengalaman</span>
+        <h2 class="text-3xl font-extrabold text-slate-900">Temui Spesialis Terbaik Kami</h2>
+      </div>
+      <a routerLink="/doctors" class="hidden md:inline-flex items-center gap-2 text-blue-600 font-bold hover:underline">
+        Lihat Semua Dokter <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Dokter Terbatas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div *ngFor="let doc of doctors" class="bg-white rounded-[18px] border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+        <div class="h-64 bg-slate-100 overflow-hidden">
+          <img [src]="getDoctorImageUrl(doc.profileImageUrl)" alt="Doctor Image" class="w-full h-full object-cover">
+        </div>
+        <div class="p-6 space-y-4">
+          <div>
+            <h4 class="font-extrabold text-lg text-slate-900">{{ doc.fullName }}</h4>
+            <p class="text-xs text-blue-600 font-bold mt-1">{{ doc.specialization }}</p>
+            <div class="flex items-center gap-0.5 mt-2">
+              <i *ngFor="let star of [1,2,3,4,5]" class="bi" 
+                 [class.bi-star-fill]="star <= (doc.averageRating || 0)" 
+                 [class.bi-star]="star > (doc.averageRating || 0)" 
+                 class="text-xs text-amber-500"></i>
+            </div>
+          </div>
+          <div class="flex items-center gap-6 text-xs text-slate-500 font-medium border-t border-b border-slate-100 py-3">
+            <span><i class="bi bi-briefcase text-blue-600 mr-1.5"></i> {{ doc.experienceYears || '5+' }} Thn Pengalaman</span>
+            <span><i class="bi bi-star-fill text-amber-500 mr-1.5"></i> {{ doc.averageRating ? (doc.averageRating | number:'1.1-1') : '0.0' }} Rating</span>
+          </div>
+          <div class="flex items-center justify-between gap-4 pt-1">
+            <a [routerLink]="['/doctors', doc.id]" class="flex-1 py-2.5 text-center text-xs font-bold text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">Lihat Profil</a>
+            <a routerLink="/register" class="flex-1 py-2.5 text-center text-xs font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all">Pesan Jadwal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="py-20 px-6 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white">
+  <div class="max-w-7xl mx-auto space-y-12">
+    <div class="text-center space-y-4">
+      <span class="px-3.5 py-1.5 bg-blue-500/20 text-blue-300 font-bold text-xs rounded-full uppercase">Mengapa Memilih Kami</span>
+      <h2 class="text-3xl lg:text-4xl font-extrabold">Keunggulan Klinik Kami</h2>
+      <p class="text-slate-400 text-sm max-w-2xl mx-auto">Kami berkomitmen memberikan pelayanan kesehatan terbaik dengan standar internasional.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-card hover:bg-white/10 transition-all group">
+        <div class="w-14 h-14 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-xl mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all">
+          <i class="bi bi-clock-history text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Booking Online 24/7</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Buat janji dengan dokter kapan saja tanpa harus datang ke klinik. Konfirmasi instan.</p>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-card hover:bg-white/10 transition-all group">
+        <div class="w-14 h-14 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-xl mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all">
+          <i class="bi bi-shield-check text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Dokter Tersertifikasi</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Tenaga medis berlisensi resmi dengan pengalaman minimal 5 tahun di bidangnya.</p>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-card hover:bg-white/10 transition-all group">
+        <div class="w-14 h-14 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-xl mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all">
+          <i class="bi bi-file-earmark-medical text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Rekam Medis Digital</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Akses riwayat kesehatan Anda kapan saja melalui portal pasien yang aman.</p>
+      </div>
+
+      <div class="bg-white/5 backdrop-blur-sm border border-white/10 p-8 rounded-card hover:bg-white/10 transition-all group">
+        <div class="w-14 h-14 bg-blue-500/20 text-blue-400 flex items-center justify-center rounded-xl mb-5 group-hover:bg-blue-500 group-hover:text-white transition-all">
+          <i class="bi bi-headset text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Support 24/7</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Tim customer service siap membantu Anda kapan pun melalui telepon atau chat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-20 px-6 bg-slate-50">
+  <div class="max-w-4xl mx-auto space-y-12">
+    <div class="text-center space-y-4">
+      <span class="px-3 py-1 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">FAQ</span>
+      <h2 class="text-3xl font-extrabold text-slate-900">Ada Pertanyaan? Kami Punya Jawabannya</h2>
+    </div>
+
+    <div class="space-y-4">
+      <div *ngFor="let faq of faqs; let i = index" class="bg-white border border-slate-100 rounded-xl overflow-hidden transition-all shadow-sm">
+        <button (click)="toggleFaq(i)" class="w-full p-6 text-left font-bold text-slate-900 flex items-center justify-between gap-4">
+          <span>{{ faq.question }}</span>
+          <i class="bi" [ngClass]="faq.open ? 'bi-chevron-up text-blue-600' : 'bi-chevron-down text-slate-400'"></i>
+        </button>
+        <div *ngIf="faq.open" class="p-6 border-t border-slate-100 bg-slate-50/50 text-sm text-slate-600 leading-relaxed transition-all">
+          {{ faq.answer }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-20 px-6 bg-gradient-to-br from-blue-50 via-white to-sky-50">
+  <div class="max-w-4xl mx-auto space-y-12">
+    <div class="text-center space-y-4">
+      <span class="px-3.5 py-1.5 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">Testimoni Pasien</span>
+      <h2 class="text-3xl font-extrabold text-slate-900">Apa Kata Mereka Tentang Kami</h2>
+    </div>
+
+    <div class="relative">
+      <div class="bg-white border border-slate-100 rounded-card-lg shadow-premium p-8 md:p-12 text-center">
+        <!-- Stars -->
+        <div class="flex justify-center gap-1 mb-6">
+          <i *ngFor="let _ of [].constructor(testimonials[currentTestimonial].rating)" class="bi bi-star-fill text-amber-400 text-lg"></i>
+          <i *ngFor="let _ of [].constructor(5 - testimonials[currentTestimonial].rating)" class="bi bi-star text-amber-400 text-lg"></i>
+        </div>
+
+        <!-- Quote -->
+        <p class="text-slate-700 text-base md:text-lg leading-relaxed italic mb-8">
+          "{{ testimonials[currentTestimonial].text }}"
+        </p>
+
+        <!-- Avatar & Name -->
+        <div class="flex items-center justify-center gap-4">
+          <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-sky-400 text-white flex items-center justify-center rounded-full font-bold text-xl">
+            {{ testimonials[currentTestimonial].name.charAt(0) }}
+          </div>
+          <div class="text-left">
+            <h4 class="font-bold text-slate-900">{{ testimonials[currentTestimonial].name }}</h4>
+            <p class="text-xs text-slate-500">{{ testimonials[currentTestimonial].role }}</p>
+          </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button (click)="prevTestimonial()" class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md hover:bg-slate-50 transition-all">
+          <i class="bi bi-chevron-left text-slate-600"></i>
+        </button>
+        <button (click)="nextTestimonial()" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-md hover:bg-slate-50 transition-all">
+          <i class="bi bi-chevron-right text-slate-600"></i>
+        </button>
+      </div>
+
+      <!-- Dots -->
+      <div class="flex justify-center gap-2 mt-6">
+        <button *ngFor="let t of testimonials; let i = index" (click)="goToTestimonial(i)" class="w-2.5 h-2.5 rounded-full transition-all" [class]="i === currentTestimonial ? 'bg-blue-600 w-8' : 'bg-slate-300 hover:bg-slate-400'"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 px-6 bg-white">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <div class="space-y-8">
+      <div class="space-y-3">
+        <span class="px-3 py-1 bg-blue-50 text-blue-600 font-bold text-xs rounded-full uppercase">Hubungi Kami</span>
+        <h2 class="text-3xl font-extrabold text-slate-900">Kami Siap Melayani Kesehatan Anda</h2>
+        <p class="text-slate-500 text-sm">Hubungi kami melalui saluran berikut atau datangi klinik kami secara langsung.</p>
+      </div>
+
+      <div class="space-y-6">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-geo-alt text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Alamat Klinik</h4>
+            <p class="text-xs text-slate-500 mt-1">Jl. Kesehatan No. 45, Blok A, Jakarta Selatan, Indonesia</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-telephone text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Nomor Telepon</h4>
+            <p class="text-xs text-slate-500 mt-1">+62-21-555-8899 / +62-812-3456-7890</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl flex-shrink-0">
+            <i class="bi bi-envelope text-xl"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900">Email Hubungan</h4>
+            <p class="text-xs text-slate-500 mt-1">kontak@kliniksys.com / info@kliniksys.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="bg-slate-50 p-8 rounded-premium border border-slate-100 shadow-premium">
+      <h4 class="font-extrabold text-lg text-slate-900 mb-6">Kirim Pesan Langsung</h4>
+      <form [formGroup]="contactForm" (ngSubmit)="onSendContact()" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Nama Lengkap *</label>
+          <input type="text" formControlName="senderName" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Nama Lengkap" [class.border-red-500]="contactForm.get('senderName')?.touched && contactForm.get('senderName')?.invalid">
+          <p *ngIf="contactForm.get('senderName')?.touched && contactForm.get('senderName')?.invalid" class="text-xxs text-red-500 mt-1">Nama pengirim wajib diisi</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Alamat Email *</label>
+          <input type="email" formControlName="senderEmail" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="email@contoh.com" [class.border-red-500]="contactForm.get('senderEmail')?.touched && contactForm.get('senderEmail')?.invalid">
+          <p *ngIf="contactForm.get('senderEmail')?.touched && contactForm.get('senderEmail')?.hasError('required')" class="text-xxs text-red-500 mt-1">Email wajib diisi</p>
+          <p *ngIf="contactForm.get('senderEmail')?.touched && contactForm.get('senderEmail')?.hasError('email')" class="text-xxs text-red-500 mt-1">Format email tidak valid</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Subjek *</label>
+          <input type="text" formControlName="subject" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Subjek Pesan" [class.border-red-500]="contactForm.get('subject')?.touched && contactForm.get('subject')?.invalid">
+          <p *ngIf="contactForm.get('subject')?.touched && contactForm.get('subject')?.invalid" class="text-xxs text-red-500 mt-1">Subjek pesan wajib diisi</p>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pesan Anda *</label>
+          <textarea rows="4" formControlName="messageContent" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Tuliskan pesan Anda di sini..." [class.border-red-500]="contactForm.get('messageContent')?.touched && contactForm.get('messageContent')?.invalid"></textarea>
+          <p *ngIf="contactForm.get('messageContent')?.touched && contactForm.get('messageContent')?.invalid" class="text-xxs text-red-500 mt-1">Pesan wajib diisi</p>
+        </div>
+        <button type="submit" [disabled]="contactForm.invalid || submitting" class="w-full py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span *ngIf="submitting" class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+          {{ submitting ? 'Mengirim...' : 'Kirim Pesan' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<app-footer />

@@ -1,0 +1,51 @@
+# ===============================
+# APPLICATION
+# ===============================
+spring.application.name=appointment-service
+server.port=8084
+
+# ===============================
+# SERVICES INTEGRATION
+# ===============================
+auth.service.url=${AUTH_SERVICE_URL:http://localhost:8081}
+patient.service.url=${PATIENT_SERVICE_URL:http://localhost:8082}
+doctor.service.url=${DOCTOR_SERVICE_URL:http://localhost:8083}
+
+# ===============================
+# DATABASE (ZERO-LEAK PLACEHOLDERS)
+# ===============================
+spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/clinic_appointment}
+spring.datasource.username=${DB_USERNAME:YOUR_DATABASE_USERNAME_HERE}
+spring.datasource.password=${DB_PASSWORD:YOUR_DATABASE_PASSWORD_HERE}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# ===============================
+# JPA / HIBERNATE
+# ===============================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.open-in-view=false
+
+# ===============================
+# SECURITY & JWT (ZERO-LEAK PLACEHOLDER)
+# ===============================
+# Ganti dengan secret key HMAC-SHA 256/512 acak minimal 32/64 karakter alfanumerik.
+jwt.secret-key=${JWT_SECRET_KEY:YOUR_SECURE_RANDOM_SECRET_KEY_MIN_32_CHARS}
+
+# ===============================
+# MAIL SENDER (ZERO-LEAK PLACEHOLDERS)
+# ===============================
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=${SPRING_MAIL_USERNAME:YOUR_GMAIL_USERNAME_HERE}
+# Gunakan Google App Password (16 karakter) jika menggunakan Gmail SMTP
+spring.mail.password=${SPRING_MAIL_PASSWORD:YOUR_GMAIL_APP_PASSWORD_HERE}
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# ===============================
+# LOGGING
+# ===============================
+logging.level.org.springframework.security=DEBUG

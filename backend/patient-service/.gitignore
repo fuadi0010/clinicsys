@@ -1,0 +1,70 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Local Configuration & Secrets ###
+src/main/resources/application.properties
+
+### Logs ###
+*.log
+logs/
+# --- Target & Build Directories (Sangat berat, wajib di-ignore) ---
+target/
+build/
+.gradle/
+/out/
+
+# --- IDE & Editor Files (Spesifik editor laptop Lek) ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.factorypath
+bin/
+nbproject/
+log/
+*.log
+
+# --- System & OS Logs ---
+.DS_Store
+Thumbs.db
+crash.log
+
+# --- Security & Configuration (PENTING: Jangan upload password DB) ---
+*.env
+*.local
+# Jika Lek menyimpan password di file properties khusus, uncomment baris bawah ini:
+application.properties

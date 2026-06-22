@@ -1,0 +1,159 @@
+<app-dashboard-layout title="Tambah Dokter Baru">
+  <div class="max-w-3xl mx-auto">
+    <!-- Card Container -->
+    <div class="bg-white border border-slate-100 rounded-card-lg shadow-card p-8">
+      <div class="mb-8 border-b border-slate-100 pb-4">
+        <h3 class="text-xl font-bold text-slate-800">Registrasi Internal Dokter</h3>
+        <p class="text-xs text-slate-500 mt-1">Daftarkan kredensial login dan profil profesional medis dokter secara aman.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+        <!-- Section: Kredensial Akun -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 mb-4 flex items-center gap-2">
+            <i class="bi bi-key-fill"></i> Kredensial Akun
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Username -->
+            <div>
+              <label for="username" class="block text-xs font-semibold text-slate-600 mb-1.5">Username *</label>
+              <input type="text" id="username" formControlName="username" maxlength="40"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="cth: dr.budi"
+                [class.border-red-500]="form.get('username')?.touched && form.get('username')?.invalid">
+              <p *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')" class="text-xxs text-red-500 mt-1">Username wajib diisi</p>
+              <p *ngIf="form.get('username')?.touched && form.get('username')?.hasError('minlength')" class="text-xxs text-red-500 mt-1">Username minimal 5 karakter</p>
+              <p *ngIf="form.get('username')?.touched && form.get('username')?.hasError('maxlength')" class="text-xxs text-red-500 mt-1">Username maksimal 40 karakter</p>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-xs font-semibold text-slate-600 mb-1.5">Email *</label>
+              <input type="email" id="email" formControlName="email" maxlength="100"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="cth: budi@klinik.com"
+                [class.border-red-500]="form.get('email')?.touched && form.get('email')?.invalid">
+              <p *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')" class="text-xxs text-red-500 mt-1">Email wajib diisi</p>
+              <p *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')" class="text-xxs text-red-500 mt-1">Format email tidak valid</p>
+            </div>
+
+            <!-- Password -->
+            <div class="md:col-span-2">
+              <label for="password" class="block text-xs font-semibold text-slate-600 mb-1.5">Password Sementara *</label>
+              <input type="password" id="password" formControlName="password" maxlength="100"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="Masukkan minimal 8 karakter"
+                [class.border-red-500]="form.get('password')?.touched && form.get('password')?.invalid">
+              <p *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')" class="text-xxs text-red-500 mt-1">Password wajib diisi</p>
+              <p *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minlength')" class="text-xxs text-red-500 mt-1">Password minimal 8 karakter</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 my-6"></div>
+
+        <!-- Section: Profil Medis -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 mb-4 flex items-center gap-2">
+            <i class="bi bi-person-badge-fill"></i> Profil Medis & Kontak
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Full Name -->
+            <div>
+              <label for="fullName" class="block text-xs font-semibold text-slate-600 mb-1.5">Nama Lengkap (beserta Gelar) *</label>
+              <input type="text" id="fullName" formControlName="fullName" maxlength="100"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="cth: dr. Budi Santoso, Sp.THT"
+                [class.border-red-500]="form.get('fullName')?.touched && form.get('fullName')?.invalid">
+              <p *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid" class="text-xxs text-red-500 mt-1">Nama lengkap wajib diisi</p>
+            </div>
+
+            <!-- Specialization -->
+            <div>
+              <label for="specialization" class="block text-xs font-semibold text-slate-600 mb-1.5">Spesialisasi *</label>
+              <select id="specialization" formControlName="specialization"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all"
+                [class.border-red-500]="form.get('specialization')?.touched && form.get('specialization')?.invalid">
+                <option value="">Pilih Spesialisasi</option>
+                <option *ngFor="let s of specializations" [value]="s.value">{{ s.label }}</option>
+              </select>
+              <p *ngIf="form.get('specialization')?.touched && form.get('specialization')?.invalid" class="text-xxs text-red-500 mt-1">Spesialisasi wajib diisi</p>
+            </div>
+
+            <!-- STR Number -->
+            <div>
+              <label for="strNumber" class="block text-xs font-semibold text-slate-600 mb-1.5">Nomor STR *</label>
+              <input type="text" id="strNumber" formControlName="strNumber" maxlength="50"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="Masukkan Nomor STR Resmi"
+                [class.border-red-500]="form.get('strNumber')?.touched && form.get('strNumber')?.invalid">
+              <div *ngIf="form.get('strNumber')?.touched && form.get('strNumber')?.invalid" class="text-xxs text-red-500 mt-1">
+                <span *ngIf="form.get('strNumber')?.hasError('required')">Nomor STR wajib diisi.</span>
+                <span *ngIf="form.get('strNumber')?.hasError('pattern')">Format nomor STR tidak valid. Wajib diawali prefix 'STR-' dan diikuti 8-10 digit angka (contoh: STR-12345678).</span>
+              </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+              <label for="phoneNumber" class="block text-xs font-semibold text-slate-600 mb-1.5">Nomor Telepon *</label>
+              <input type="text" id="phoneNumber" formControlName="phoneNumber" maxlength="13" (keydown)="limitDigits($event, 13)"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="cth: 08123456789"
+                [class.border-red-500]="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid">
+              <div *ngIf="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid" class="text-xxs text-red-500 mt-1">
+                <span *ngIf="form.get('phoneNumber')?.hasError('required')">Nomor telepon wajib diisi.</span>
+                <span *ngIf="form.get('phoneNumber')?.hasError('pattern')">Nomor HP harus diawali '08' atau '8' dengan panjang 10-13 digit.</span>
+              </div>
+            </div>
+
+            <!-- Consultation Fee -->
+            <div class="md:col-span-2">
+              <label for="consultationFee" class="block text-xs font-semibold text-slate-600 mb-1.5">Tarif Konsultasi (Rp) *</label>
+              <input type="number" id="consultationFee" formControlName="consultationFee" min="0"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="cth: 150000"
+                [class.border-red-500]="form.get('consultationFee')?.touched && form.get('consultationFee')?.invalid">
+              <p *ngIf="form.get('consultationFee')?.touched && form.get('consultationFee')?.invalid" class="text-xxs text-red-500 mt-1">Tarif konsultasi harus bernilai positif</p>
+            </div>
+
+            <!-- Bio -->
+            <div class="md:col-span-2">
+              <label for="bio" class="block text-xs font-semibold text-slate-600 mb-1.5">Biografi Ringkas</label>
+              <textarea id="bio" formControlName="bio" rows="3" style="resize: none;"
+                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all placeholder-slate-400"
+                placeholder="Tulis biografi singkat tentang dokter..."></textarea>
+            </div>
+
+            <!-- Upload Foto Profil Dokter -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-600 mb-1.5">Foto Profil Dokter</label>
+              <div class="relative group cursor-pointer border-2 border-dashed border-blue-200 hover:border-blue-500 rounded-xl p-4 bg-slate-50 hover:bg-blue-50/30 transition-all duration-300 flex flex-col items-center justify-center gap-2" (click)="fileInput.click()">
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="hidden">
+                <div class="w-10 h-10 bg-blue-100/80 group-hover:bg-blue-100 text-blue-600 rounded-full flex items-center justify-center transition-all">
+                  <i class="bi bi-cloud-arrow-up text-lg"></i>
+                </div>
+                <div class="text-center">
+                  <p class="text-xs font-bold text-slate-800">{{ selectedFile ? selectedFile.name : 'Pilih File Foto Dokter' }}</p>
+                  <p class="text-[10px] text-slate-400 mt-0.5">Format JPG, JPEG, PNG (Maks 5MB)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-4 justify-end pt-4 border-t border-slate-100">
+          <a routerLink="/admin/doctors"
+            class="px-5 py-2.5 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-all">
+            Batal
+          </a>
+          <button type="submit" [disabled]="loading"
+            class="px-5 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all flex items-center gap-2">
+            <span *ngIf="loading" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+            Simpan Data Dokter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</app-dashboard-layout>

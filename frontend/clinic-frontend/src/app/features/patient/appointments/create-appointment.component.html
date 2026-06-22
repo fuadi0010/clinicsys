@@ -1,0 +1,327 @@
+<app-dashboard-layout title="Buat Janji Temu">
+  <div class="max-w-2xl mx-auto">
+    <!-- Card Utama -->
+    <div class="bg-white border border-slate-100 rounded-card-lg shadow-card p-8 relative">
+      <div class="flex items-center gap-4 mb-8 pb-6 border-b border-slate-100">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 flex items-center justify-center rounded-xl shadow-inner">
+          <i class="bi bi-calendar-plus text-xl animate-pulse"></i>
+        </div>
+        <div>
+          <h3 class="font-extrabold text-lg text-slate-900">Janji Temu Baru</h3>
+          <p class="text-xs text-slate-500 font-medium">Buat janji temu secara instan dan dapatkan E-tiket secara otomatis.</p>
+        </div>
+      </div>
+
+      <form [formGroup]="appointmentForm" (ngSubmit)="submit()" class="space-y-6">
+        <!-- Pilihan Dokter -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Filter Spesialisasi</label>
+            <select [(ngModel)]="selectedSpecialization" [ngModelOptions]="{standalone: true}" (change)="filterDoctors()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-semibold text-slate-700">
+              <option value="">Semua Spesialisasi</option>
+              <option *ngFor="let spec of specializations" [value]="spec">{{ spec }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih Dokter</label>
+            <select formControlName="doctorId" (change)="fetchAvailableSlots()" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-semibold text-slate-700" [class.border-red-300]="appointmentForm.get('doctorId')?.invalid && appointmentForm.get('doctorId')?.touched">
+              <option [ngValue]="null">-- Pilih Dokter --</option>
+              <option *ngFor="let doc of filteredDoctors" [value]="doc.id">{{ doc.fullName }} ({{ doc.specialization }})</option>
+            </select>
+            <p *ngIf="appointmentForm.get('doctorId')?.invalid && appointmentForm.get('doctorId')?.touched" class="text-xs text-red-500 mt-1.5 font-bold"><i class="bi bi-exclamation-circle mr-1"></i>Pilih dokter terlebih dahulu</p>
+          </div>
+        </div>
+
+        <!-- Pilihan Tanggal Dropdowns -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tanggal Kunjungan</label>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <span class="block text-[10px] text-slate-400 font-bold mb-1 uppercase">Hari</span>
+              <select [(ngModel)]="selectedDay" [ngModelOptions]="{standalone: true}" (change)="onDateChange()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-semibold text-slate-700">
+                <option *ngFor="let d of days" [value]="d">{{ d | number:'2.0' }}</option>
+              </select>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-bold mb-1 uppercase">Bulan</span>
+              <select [(ngModel)]="selectedMonth" [ngModelOptions]="{standalone: true}" (change)="onDateChange()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-semibold text-slate-700">
+                <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+              </select>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-bold mb-1 uppercase">Tahun</span>
+              <select [(ngModel)]="selectedYear" [ngModelOptions]="{standalone: true}" (change)="onDateChange()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-semibold text-slate-700">
+                <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Time Picker Modern Grid -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih Jam Konsultasi (Slot Kerja)</label>
+          
+          <div *ngIf="slotsLoading" class="text-center py-6 bg-slate-50 rounded-xl border border-slate-100">
+            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="text-[11px] text-slate-500 mt-2 font-bold">Mengecek slot kosong di database...</p>
+          </div>
+
+          <div *ngIf="!slotsLoading && availableSlots.length === 0" class="text-center py-6 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <i class="bi bi-clock text-slate-400 text-xl"></i>
+            <p class="text-xs text-slate-500 mt-1 font-semibold">Silakan pilih dokter untuk menampilkan slot jam yang tersedia.</p>
+          </div>
+
+          <div *ngIf="!slotsLoading && availableSlots.length > 0" class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <!-- Sesi Pagi -->
+            <div class="space-y-2">
+              <span class="block text-[10px] font-extrabold text-blue-600 uppercase tracking-wider">Sesi Pagi (08:00 - 11:00)</span>
+              <div class="grid grid-cols-4 gap-2">
+                <button type="button" 
+                        *ngFor="let slot of availableSlots.slice(0, 7)" 
+                        [disabled]="!slot.available"
+                        (click)="selectTimeSlot(slot.time)"
+                        [ngClass]="{
+                          'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/10': selectedTimeSlot === slot.time,
+                          'bg-white text-slate-800 border-slate-200 hover:bg-slate-100 hover:border-slate-300': selectedTimeSlot !== slot.time && slot.available,
+                          'bg-slate-200 text-slate-400 border-slate-200 cursor-not-allowed line-through': !slot.available
+                        }"
+                        class="py-2.5 px-2 text-xs font-bold rounded-lg border transition-all text-center">
+                  {{ slot.label }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Sesi Siang -->
+            <div class="space-y-2">
+              <span class="block text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">Sesi Siang (13:00 - 15:00)</span>
+              <div class="grid grid-cols-4 gap-2">
+                <button type="button" 
+                        *ngFor="let slot of availableSlots.slice(7)" 
+                        [disabled]="!slot.available"
+                        (click)="selectTimeSlot(slot.time)"
+                        [ngClass]="{
+                          'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/10': selectedTimeSlot === slot.time,
+                          'bg-white text-slate-800 border-slate-200 hover:bg-slate-100 hover:border-slate-300': selectedTimeSlot !== slot.time && slot.available,
+                          'bg-slate-200 text-slate-400 border-slate-200 cursor-not-allowed line-through': !slot.available
+                        }"
+                        class="py-2.5 px-2 text-xs font-bold rounded-lg border transition-all text-center">
+                  {{ slot.label }}
+                </button>
+              </div>
+            </div>
+            
+            <!-- Petunjuk Legend -->
+            <div class="flex items-center gap-4 pt-2 text-[10px] text-slate-500 font-bold border-t border-slate-200/50">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-white border border-slate-200 inline-block"></span>Tersedia</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-slate-200 border border-slate-200 inline-block"></span>Penuh (Booked)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-blue-600 inline-block"></span>Terpilih</span>
+            </div>
+          </div>
+          <p *ngIf="appointmentForm.get('appointmentTime')?.invalid && appointmentForm.get('appointmentTime')?.touched" class="text-xs text-red-500 mt-1.5 font-bold"><i class="bi bi-exclamation-circle mr-1"></i>Waktu janji temu wajib dipilih</p>
+        </div>
+
+        <!-- Kolom Catatan (Dengan resize: none) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Catatan Keluhan (opsional)</label>
+          <textarea formControlName="notes" rows="3" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" style="resize: none;" placeholder="Jelaskan secara singkat keluhan atau keperluan konsultasi Anda..."></textarea>
+        </div>
+
+        <!-- Tombol Lanjut ke Pembayaran -->
+        <button type="submit" class="w-full py-4 bg-blue-600 text-white font-extrabold rounded-button shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+          <i class="bi bi-wallet2"></i>
+          <span>Buat Janji Temu & Bayar</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG PROSES PEMBAYARAN -->
+  <div *ngIf="showPaymentModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+      <!-- Header Modal -->
+      <div class="bg-gradient-to-r from-blue-700 to-blue-600 text-white p-6 relative">
+        <h4 class="font-extrabold text-lg">Konfirmasi & Pembayaran</h4>
+        <p class="text-[11px] text-blue-100 font-medium">Selesaikan pembayaran untuk memproses e-tiket Anda.</p>
+        <button type="button" (click)="showPaymentModal = false" class="absolute right-6 top-6 text-white/80 hover:text-white"><i class="bi bi-x-lg text-lg"></i></button>
+      </div>
+
+      <!-- Detail Transaksi -->
+      <div class="p-6 space-y-6">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-400 font-bold">Dokter</span>
+            <span class="text-slate-900 font-extrabold">{{ getDoctorName() }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-400 font-bold">Spesialisasi</span>
+            <span class="text-blue-600 font-extrabold">{{ getDoctorSpecialization() }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-400 font-bold">Tanggal</span>
+            <span class="text-slate-900 font-extrabold">{{ appointmentForm.get('appointmentDate')?.value }}</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-slate-400 font-bold">Waktu</span>
+            <span class="text-slate-900 font-extrabold">{{ selectedTimeSlot ? selectedTimeSlot.substring(0, 5) : '' }}</span>
+          </div>
+          <div class="h-px bg-slate-200/50 my-2"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-800 font-extrabold text-xs uppercase tracking-wider">Biaya Layanan</span>
+            <span class="text-blue-600 font-black text-lg">Rp 150.000</span>
+          </div>
+        </div>
+
+        <!-- Pilihan Simulasi Metode Pembayaran -->
+        <div class="space-y-3">
+          <span class="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Simulasi Metode Pembayaran</span>
+          <div class="flex items-center gap-3 p-3.5 border border-blue-200 bg-blue-50/20 rounded-xl">
+            <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs">VA</div>
+            <div class="text-left">
+              <p class="text-xs font-extrabold text-slate-900">Virtual Account (BCA/Mandiri)</p>
+              <p class="text-[9px] text-slate-500 font-bold">Simulasi Pembayaran Otomatis</p>
+            </div>
+            <i class="bi bi-check-circle-fill text-blue-600 ml-auto"></i>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <button type="button" 
+                (click)="processPayment()" 
+                [disabled]="paymentProcessing"
+                class="w-full py-4 bg-blue-600 text-white font-extrabold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+          <span *ngIf="paymentProcessing" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span>{{ paymentProcessing ? 'Memproses Transaksi...' : 'Bayar Sekarang' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG QR CODE PEMBAYARAN REAL-TIME -->
+  <div *ngIf="showQrModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+      <!-- Header Modal -->
+      <div class="bg-gradient-to-r from-blue-700 to-blue-600 text-white p-6 text-center relative">
+        <h4 class="font-extrabold text-lg">Scan QR Code Pembayaran</h4>
+        <p class="text-[11px] text-blue-100 font-medium">Buka kamera HP Anda untuk melakukan pembayaran interaktif.</p>
+      </div>
+
+      <!-- Konten QR -->
+      <div class="p-6 text-center space-y-6">
+        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex flex-col items-center">
+          <!-- QR Code Generator via Google Chart API (Zero-Dependency) -->
+          <div class="bg-white p-4 rounded-xl border border-slate-200 inline-block shadow-sm">
+            <img *ngIf="qrCodeUrl" [src]="getSafeQrCodeUrl(qrCodeUrl)" alt="QR Code Pembayaran" class="w-48 h-48">
+            <div *ngIf="!qrCodeUrl" class="w-48 h-48 flex items-center justify-center bg-slate-100 text-slate-400">
+              <span class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 font-semibold mt-4 text-center">Scan QR Code di atas menggunakan kamera HP Anda, lalu selesaikan pembayaran di browser HP.</p>
+        </div>
+
+        <!-- Indikator Polling Status -->
+        <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-600 bg-blue-50/50 py-3 px-4 rounded-xl border border-blue-100/50">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
+          </span>
+          <span>Menunggu konfirmasi pembayaran dari HP Anda...</span>
+        </div>
+
+        <!-- Button Batal -->
+        <button type="button" 
+                (click)="showQrModal = false; stopPaymentPolling()" 
+                class="w-full py-3 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition-all">
+          Batal & Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG E-TIKET SUKSES -->
+  <div *ngIf="showTicketModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden animate-in zoom-in-95 duration-200">
+      
+      <!-- Bagian Atas Tiket -->
+      <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 text-white p-8 text-center space-y-3 relative">
+        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto shadow-inner text-white text-3xl">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <div>
+          <h4 class="text-lg font-black tracking-tight">E-TIKET RESERVASI</h4>
+          <p class="text-emerald-100 text-xs font-bold uppercase tracking-wider">Status: TERBIT (APPROVED)</p>
+        </div>
+      </div>
+
+      <!-- Tiket Connector (Garis sobek) -->
+      <div class="flex justify-between items-center px-6 bg-slate-50 relative h-6 my-[-3px]">
+        <div class="w-6 h-6 rounded-full bg-slate-900/70 absolute left-[-12px]"></div>
+        <div class="w-full border-t-2 border-dashed border-slate-300"></div>
+        <div class="w-6 h-6 rounded-full bg-slate-900/70 absolute right-[-12px]"></div>
+      </div>
+
+      <!-- Detail Tiket -->
+      <div class="p-6 bg-slate-50 text-center space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left space-y-4">
+          <div>
+            <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Nomor Tiket</span>
+            <span class="text-sm font-extrabold text-slate-900">{{ ticketBarcode }}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Dokter</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ createdAppointment?.doctorName }}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Spesialisasi</span>
+              <span class="text-xs font-bold text-blue-600">{{ getDoctorSpecialization() }}</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Tanggal</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ createdAppointment?.appointmentDate }}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Jam Kunjungan</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ createdAppointment?.appointmentTime?.substring(0, 5) }}</span>
+            </div>
+          </div>
+          <div *ngIf="createdAppointment?.notes" class="pt-2 border-t border-slate-100">
+            <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Catatan Keluhan</span>
+            <p class="text-xs text-slate-600 font-semibold italic">"{{ createdAppointment?.notes }}"</p>
+          </div>
+        </div>
+
+        <!-- Barcode Simulasi -->
+        <div class="space-y-2">
+          <div class="bg-white p-4 rounded-2xl border border-slate-100 inline-block shadow-sm">
+            <!-- Representasi Barcode CSS Premium -->
+            <div class="flex items-center justify-center gap-1.5 h-12 w-48">
+              <span class="h-full bg-slate-950 w-1"></span>
+              <span class="h-full bg-slate-950 w-2"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1.5"></span>
+              <span class="h-full bg-slate-950 w-2.5"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1.5"></span>
+              <span class="h-full bg-slate-950 w-3"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1"></span>
+              <span class="h-full bg-slate-950 w-2"></span>
+            </div>
+            <p class="text-[9px] text-slate-400 font-black tracking-widest mt-1">{{ ticketBarcode }}</p>
+          </div>
+          <p class="text-[10px] text-slate-400 font-semibold max-w-xs mx-auto">Tunjukkan barcode di atas kepada petugas resepsionis klinik saat kedatangan.</p>
+        </div>
+
+        <!-- Action Button -->
+        <button type="button" 
+                (click)="goToAppointments()" 
+                class="w-full py-3.5 bg-slate-900 text-white font-extrabold rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
+          <span>Lihat Janji Temu Saya</span>
+          <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>

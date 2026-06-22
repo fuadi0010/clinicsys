@@ -1,0 +1,92 @@
+<div class="min-h-screen flex">
+  <!-- Left: Hero Banner -->
+  <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-sky-600 via-blue-600 to-blue-800 text-white relative overflow-hidden items-center justify-center p-12">
+    <div class="absolute inset-0 bg-[url('/api/placeholder/800/900')] opacity-10 bg-cover bg-center"></div>
+    <div class="relative max-w-md space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+          <i class="bi bi-shield-plus text-3xl"></i>
+        </div>
+        <span class="font-extrabold text-2xl tracking-tight">CLINICSYS</span>
+      </div>
+      <h1 class="text-4xl font-black leading-tight">Start Your<br>Health Journey Today</h1>
+      <p class="text-blue-100 text-sm leading-relaxed">Create your account and get instant access to online appointment booking, digital medical records, and expert healthcare consultations.</p>
+      <div class="space-y-4 pt-4">
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-calendar-check text-sm"></i></div>
+          <span>Easy online appointment scheduling</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-person-badge text-sm"></i></div>
+          <span>Verified & experienced specialists</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-shield-lock text-sm"></i></div>
+          <span>HIPAA-compliant data protection</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 bg-surface">
+    <div class="w-full max-w-md space-y-8">
+      <!-- Back to Home Link -->
+      <div class="text-left">
+        <a routerLink="/" class="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="bi bi-arrow-left"></i> Kembali ke Beranda
+        </a>
+      </div>
+
+      <div class="text-center lg:text-left">
+        <div class="lg:hidden flex justify-center mb-6">
+          <div class="bg-blue-600 text-white p-3 rounded-xl shadow-lg shadow-blue-500/30">
+            <i class="bi bi-shield-plus text-2xl"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl font-extrabold text-slate-900">Buat Akun Baru</h2>
+        <p class="text-sm text-slate-500 mt-2">Daftar untuk mengakses semua layanan kesehatan kami.</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-person"></i></span>
+            <input formControlName="usernameRequest" type="text" class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Pilih username" [class.border-red-300]="registerForm.get('usernameRequest')?.invalid && registerForm.get('usernameRequest')?.touched">
+          </div>
+          <p *ngIf="registerForm.get('usernameRequest')?.hasError('required') && registerForm.get('usernameRequest')?.touched" class="text-xs text-red-500 mt-1.5">Username wajib diisi</p>
+          <p *ngIf="registerForm.get('usernameRequest')?.hasError('minlength') && registerForm.get('usernameRequest')?.touched" class="text-xs text-red-500 mt-1.5">Username minimal harus 5 karakter</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Email</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-envelope"></i></span>
+            <input formControlName="emailRequest" type="email" class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Masukkan email" [class.border-red-300]="registerForm.get('emailRequest')?.invalid && registerForm.get('emailRequest')?.touched">
+          </div>
+          <p *ngIf="registerForm.get('emailRequest')?.invalid && registerForm.get('emailRequest')?.touched" class="text-xs text-red-500 mt-1.5">Email wajib diisi dan valid</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Password</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-lock"></i></span>
+            <input formControlName="passwordRequest" type="password" class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Minimal 8 karakter" [class.border-red-300]="registerForm.get('passwordRequest')?.invalid && registerForm.get('passwordRequest')?.touched">
+          </div>
+          <p *ngIf="registerForm.get('passwordRequest')?.invalid && registerForm.get('passwordRequest')?.touched" class="text-xs text-red-500 mt-1.5">Password minimal 8 karakter</p>
+        </div>
+
+        <button type="submit" [disabled]="loading" class="w-full py-3.5 bg-blue-600 text-white font-bold rounded-button shadow-md shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span *ngIf="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span>{{ loading ? 'Memproses...' : 'Daftar Akun' }}</span>
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-slate-500">
+        Sudah punya akun?
+        <a routerLink="/login" class="text-blue-600 font-bold hover:underline">Masuk</a>
+      </p>
+    </div>
+  </div>
+</div>

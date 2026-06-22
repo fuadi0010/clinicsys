@@ -1,0 +1,123 @@
+<app-dashboard-layout title="Buat Rekam Medis">
+  <!-- Empty State if no appointment selected -->
+  <div *ngIf="noAppointmentSelected" class="max-w-2xl mx-auto py-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <app-empty-state 
+      icon="bi-file-earmark-exclamation"
+      title="Jadwal Janji Temu Belum Dipilih"
+      message="Silakan pilih salah satu jadwal janji temu pasien terlebih dahulu pada tabel Janji Temu untuk mulai mengisi rekam medis."
+      actionLabel="Pilih Janji Temu"
+      actionRoute="/doctor/appointments" />
+  </div>
+
+  <!-- Form content if appointment selected -->
+  <div *ngIf="!noAppointmentSelected" class="max-w-2xl mx-auto py-6">
+    <div class="bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden">
+      <!-- Header / Banner (Dominasi warna BIRU Klinik Premium) -->
+      <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-white/10 backdrop-blur-md text-white flex items-center justify-center rounded-xl shadow-inner">
+            <i class="bi bi-file-earmark-medical text-2xl"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-xl">Rekam Medis Baru</h3>
+            <p class="text-xs text-blue-100">Catat informasi diagnosis dan tindakan pasien secara akurat.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Pasien & Janji Temu (Readonly) -->
+      <div class="bg-blue-50/50 border-b border-blue-100 p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <i class="bi bi-info-circle text-blue-600"></i>
+          <span class="text-xs font-bold text-blue-800 uppercase tracking-wider">Informasi Janji Temu</span>
+        </div>
+        
+        <div *ngIf="detailsLoading" class="animate-pulse space-y-3">
+          <div class="h-4 bg-slate-200 rounded w-3/4"></div>
+          <div class="h-4 bg-slate-200 rounded w-1/2"></div>
+        </div>
+
+        <div *ngIf="!detailsLoading" class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm">
+          <div class="flex items-baseline gap-2">
+            <span class="text-slate-500 w-20 flex-shrink-0">Pasien:</span>
+            <span class="font-semibold text-slate-800">{{ patientName || '-' }}</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-slate-500 w-20 flex-shrink-0">Dokter:</span>
+            <span class="font-semibold text-slate-800">{{ doctorName || '-' }}</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-slate-500 w-20 flex-shrink-0">Tanggal:</span>
+            <span class="font-semibold text-slate-800">{{ appointmentDate || '-' }}</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-slate-500 w-20 flex-shrink-0">Jam:</span>
+            <span class="font-semibold text-slate-800">{{ appointmentTime || '-' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Input -->
+      <div class="p-8">
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-6">
+          
+          <!-- Keluhan -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Keluhan</label>
+            <textarea formControlName="complaint" rows="3" style="resize: none;"
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all placeholder:text-slate-400"
+              placeholder="Deskripsikan keluhan utama pasien..." 
+              [class.border-red-300]="form.get('complaint')?.invalid && form.get('complaint')?.touched">
+            </textarea>
+            <p *ngIf="form.get('complaint')?.invalid && form.get('complaint')?.touched" class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+              <i class="bi bi-exclamation-circle-fill"></i> Keluhan wajib diisi
+            </p>
+          </div>
+
+          <!-- Diagnosis -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Diagnosis</label>
+            <textarea formControlName="diagnosis" rows="3" style="resize: none;"
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all placeholder:text-slate-400"
+              placeholder="Hasil diagnosis medis dokter..." 
+              [class.border-red-300]="form.get('diagnosis')?.invalid && form.get('diagnosis')?.touched">
+            </textarea>
+            <p *ngIf="form.get('diagnosis')?.invalid && form.get('diagnosis')?.touched" class="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+              <i class="bi bi-exclamation-circle-fill"></i> Diagnosis wajib diisi
+            </p>
+          </div>
+
+          <!-- Tindakan -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Tindakan (Opsional)</label>
+            <textarea formControlName="treatment" rows="3" style="resize: none;"
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all placeholder:text-slate-400"
+              placeholder="Tindakan medis yang dilakukan pada pasien...">
+            </textarea>
+          </div>
+
+          <!-- Catatan -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Catatan (Opsional)</label>
+            <textarea formControlName="notes" rows="2" style="resize: none;"
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all placeholder:text-slate-400"
+              placeholder="Catatan tambahan dokter...">
+            </textarea>
+          </div>
+
+          <!-- Action Button -->
+          <div class="flex gap-4 pt-4">
+            <a routerLink="/doctor/appointments" class="w-1/3 py-3.5 border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-all text-center text-sm">
+              Kembali
+            </a>
+            <button type="submit" [disabled]="loading || detailsLoading" 
+              class="flex-1 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm">
+              <span *ngIf="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              <span>{{ loading ? 'Menyimpan...' : 'Simpan Rekam Medis' }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>

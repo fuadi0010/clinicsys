@@ -1,0 +1,71 @@
+<div class="sidebar">
+
+  <div class="logo">
+
+    Clinic
+
+  </div>
+
+  @if(role === 'PATIENT') {
+
+    <a routerLink="/patient/dashboard">
+
+      Dashboard
+
+    </a>
+
+    <a routerLink="/patient/profile">
+
+      Profile
+
+    </a>
+
+    <a routerLink="/patient/doctors">
+
+      Doctors
+
+    </a>
+
+    <a routerLink="/patient/appointments">
+
+      Appointments
+
+    </a>
+
+    <a routerLink="/patient/medical-records">
+
+      Medical Records
+
+    </a>
+
+  }
+
+  @if(role === 'DOCTOR') {
+
+    <a routerLink="/doctor/dashboard">
+
+      Dashboard
+
+    </a>
+
+    <a routerLink="/doctor/profile">
+
+      Profile
+
+    </a>
+
+    <a routerLink="/doctor/appointments">
+
+      Appointments
+
+    </a>
+
+    <a routerLink="/doctor/medical-records">
+
+      Medical Records
+
+    </a>
+
+  }
+
+</div>

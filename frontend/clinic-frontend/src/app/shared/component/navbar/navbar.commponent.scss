@@ -1,0 +1,54 @@
+.navbar-custom {
+
+  height: 70px;
+
+  background:
+    white;
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  padding:
+    0 24px;
+
+  box-shadow:
+    var(--shadow-sm);
+
+}
+
+.navbar-brand {
+
+  font-size:
+    20px;
+
+  font-weight:
+    700;
+
+  color:
+    var(--primary);
+
+}
+
+.logout-btn {
+
+  border: none;
+
+  background:
+    var(--danger);
+
+  color:
+    white;
+
+  padding:
+    10px 16px;
+
+  border-radius:
+    10px;
+
+}

@@ -1,0 +1,91 @@
+<div class="min-h-screen flex">
+  <!-- Left: Hero Banner -->
+  <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-700 via-blue-600 to-sky-500 text-white relative overflow-hidden items-center justify-center p-12">
+    <div class="absolute inset-0 bg-[url('/api/placeholder/800/900')] opacity-10 bg-cover bg-center"></div>
+    <div class="relative max-w-md space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+          <i class="bi bi-shield-plus text-3xl"></i>
+        </div>
+        <span class="font-extrabold text-2xl tracking-tight">CLINICSYS</span>
+      </div>
+      <h1 class="text-4xl font-black leading-tight">Welcome Back to<br>Your Health Portal</h1>
+      <p class="text-blue-100 text-sm leading-relaxed">Access your medical records, book appointments with specialists, and manage your healthcare journey all in one place.</p>
+      <div class="space-y-4 pt-4">
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-shield-check text-sm"></i></div>
+          <span>Secure & encrypted data access</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-clock-history text-sm"></i></div>
+          <span>24/7 appointment booking</span>
+        </div>
+        <div class="flex items-center gap-3 text-sm">
+          <div class="w-8 h-8 bg-white/15 backdrop-blur-sm rounded-lg flex items-center justify-center flex-shrink-0"><i class="bi bi-file-earmark-medical text-sm"></i></div>
+          <span>Digital medical records access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Form -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-6 bg-surface">
+    <div class="w-full max-w-md space-y-8">
+      <!-- Back to Home Link -->
+      <div class="text-left">
+        <a routerLink="/" class="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="bi bi-arrow-left"></i> Kembali ke Beranda
+        </a>
+      </div>
+
+      <div class="text-center lg:text-left">
+        <div class="lg:hidden flex justify-center mb-6">
+          <div class="bg-blue-600 text-white p-3 rounded-xl shadow-lg shadow-blue-500/30">
+            <i class="bi bi-shield-plus text-2xl"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl font-extrabold text-slate-900">Masuk ke Akun</h2>
+        <p class="text-sm text-slate-500 mt-2">Silakan masuk menggunakan kredensial akun Anda.</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-person"></i></span>
+            <input formControlName="username" type="text" class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Masukkan username" [class.border-red-300]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          </div>
+          <p *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-xs text-red-500 mt-1.5">Username wajib diisi</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+            <a (click)="onForgotPassword($event)" class="text-xs font-bold text-blue-600 hover:underline cursor-pointer">Lupa Password?</a>
+          </div>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-lock"></i></span>
+            <input formControlName="password" type="password" class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Masukkan password" [class.border-red-300]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          </div>
+          <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-xs text-red-500 mt-1.5">Password wajib diisi</p>
+        </div>
+
+        <button type="submit" [disabled]="loading" class="w-full py-3.5 bg-blue-600 text-white font-bold rounded-button shadow-md shadow-blue-600/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <span *ngIf="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+          <span>{{ loading ? 'Memproses...' : 'Masuk' }}</span>
+        </button>
+      </form>
+
+      <div class="text-center text-sm text-slate-500 space-y-2">
+        <p>
+          Belum punya akun?
+          <a routerLink="/register" class="text-blue-600 font-bold hover:underline">Daftar Sekarang</a>
+        </p>
+        <p>
+          Akun belum aktif?
+          <a routerLink="/verify-otp" class="text-blue-600 font-bold hover:underline">Verifikasi Akun Anda</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<app-dashboard-layout title="Rekam Medis">
+  <!-- Empty -->
+  <div *ngIf="records.length === 0" class="text-center py-20 bg-white border border-slate-100 rounded-card-lg shadow-card">
+    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i class="bi bi-file-earmark-medical text-3xl text-slate-400"></i>
+    </div>
+    <h3 class="font-bold text-slate-900 mb-2">Belum Ada Rekam Medis</h3>
+    <p class="text-sm text-slate-500">Riwayat rekam medis akan muncul setelah Anda melakukan konsultasi dengan dokter.</p>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="records.length > 0" class="bg-white border border-slate-100 rounded-card-lg shadow-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-100 bg-slate-50">
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">#</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Tanggal</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Keluhan</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Diagnosis</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Tindakan</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Aksi & Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of records" class="border-b border-slate-50 hover:bg-slate-50/50 transition-all">
+            <td class="px-6 py-4 font-medium text-slate-900">{{ r.id }}</td>
+            <td class="px-6 py-4 text-slate-600 whitespace-nowrap">{{ r.examinationDate }}</td>
+            <td class="px-6 py-4 text-slate-600 max-w-[200px]">{{ r.complaint }}</td>
+            <td class="px-6 py-4">
+              <span class="inline-flex px-3 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-full">{{ r.diagnosis }}</span>
+            </td>
+            <td class="px-6 py-4 text-slate-600 max-w-[200px]">{{ r.treatment }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <button *ngIf="!hasBeenRated(r.appointmentId)"
+                      (click)="openRatingModal(r)"
+                      class="px-3 py-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all shadow-sm cursor-pointer"
+                      title="Beri Ulasan untuk Dokter">
+                <i class="bi bi-star"></i> Beri Rating Dokter
+              </button>
+              <span *ngIf="hasBeenRated(r.appointmentId)" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-600 font-extrabold">
+                <i class="bi bi-star-fill text-amber-400"></i> {{ getRatingValue(r.appointmentId) }}/5
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Rating Modal -->
+  <div *ngIf="showRatingModal && selectedRecord" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-100 rounded-card-lg shadow-card-lg max-w-md w-full p-6 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div>
+          <h3 class="font-extrabold text-slate-900 text-base">Ulasan & Rating Dokter</h3>
+          <p class="text-xs text-slate-500 font-medium">Beri ulasan untuk {{ getDoctorName(selectedRecord.doctorId) }}</p>
+        </div>
+        <button (click)="closeRatingModal()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="space-y-5">
+        <!-- Rating Stars -->
+        <div class="text-center space-y-2">
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Berikan Bintang</label>
+          <div class="flex items-center justify-center gap-2 text-3xl text-amber-400">
+            <button *ngFor="let star of [1,2,3,4,5]" (click)="selectRatingValue(star)" type="button" class="focus:outline-none transition-all hover:scale-110 cursor-pointer">
+              <i class="bi" [class.bi-star-fill]="star <= ratingValue" [class.bi-star]="star > ratingValue"></i>
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 font-medium" *ngIf="ratingValue > 0">
+            {{ ratingValue }} Bintang - {{ ratingValue === 5 ? 'Sangat Puas' : (ratingValue === 4 ? 'Puas' : (ratingValue === 3 ? 'Cukup' : (ratingValue === 2 ? 'Kurang Puas' : 'Sangat Kurang'))) }}
+          </p>
+        </div>
+
+        <!-- Ulasan -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Ulasan Singkat</label>
+          <textarea [(ngModel)]="reviewText" rows="3" maxlength="500" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all resize-none" placeholder="Bagaimana pengalaman konsultasi Anda dengan dokter ini? (maks 500 karakter)"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 justify-end pt-4 border-t border-slate-100">
+        <button (click)="closeRatingModal()" type="button" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-bold text-xs rounded-lg transition-all cursor-pointer">
+          Batal
+        </button>
+        <button (click)="submitRating()" [disabled]="submittingRating || ratingValue === 0" type="button" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+          {{ submittingRating ? 'Mengirim...' : 'Kirim Ulasan' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>

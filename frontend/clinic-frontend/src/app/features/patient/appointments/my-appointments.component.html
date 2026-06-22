@@ -1,0 +1,210 @@
+<app-dashboard-layout title="Janji Temu Saya">
+  <!-- Tabs -->
+  <div class="flex gap-1 bg-slate-100 p-1 rounded-xl mb-8 w-fit">
+    <button *ngFor="let tab of tabs" (click)="activeTab = tab.key; filterAppointments()" class="px-5 py-2.5 text-sm font-bold rounded-lg transition-all" [class.bg-white]="activeTab === tab.key" [class.text-slate-900]="activeTab === tab.key" [class.text-slate-500]="activeTab !== tab.key" [class.shadow-sm]="activeTab === tab.key">
+      {{ tab.label }}
+    </button>
+  </div>
+
+  <app-empty-state *ngIf="filteredAppointments.length === 0"
+    icon="bi-calendar-x"
+    title="Tidak Ada Janji Temu"
+    message="Belum ada janji temu untuk kategori ini."
+    actionLabel="Buat Janji Temu"
+    actionRoute="/patient/appointments/create" />
+
+  <!-- Table -->
+  <div *ngIf="filteredAppointments.length > 0" class="bg-white border border-slate-100 rounded-card-lg shadow-card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-100 bg-slate-50">
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">#</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Tanggal</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Waktu</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Catatan</th>
+            <th class="text-left px-6 py-4 font-bold text-slate-700 text-xs uppercase tracking-wider">Status & Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of filteredAppointments" class="border-b border-slate-50 hover:bg-slate-50/50 transition-all">
+            <td class="px-6 py-4 font-medium text-slate-900">{{ a.id }}</td>
+            <td class="px-6 py-4 text-slate-600">{{ a.appointmentDate }}</td>
+            <td class="px-6 py-4 text-slate-600">{{ a.appointmentTime }}</td>
+            <td class="px-6 py-4 text-slate-500 max-w-[200px] truncate">{{ a.notes || '-' }}</td>
+            <td class="px-6 py-4">
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Clickable Badge for UNPAID to Resume Payment -->
+                <a *ngIf="a.status === 'UNPAID'" 
+                   [routerLink]="['/patient/appointments/create']" 
+                   [queryParams]="{ resumeId: a.id }" 
+                   class="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-amber-50 text-amber-600 border border-amber-200 hover:bg-amber-100 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                   title="Klik untuk Lanjutkan Pembayaran">
+                  BELUM BAYAR (BAYAR)
+                </a>
+
+                <!-- Standard Badge for other statuses -->
+                <span *ngIf="a.status !== 'UNPAID'" class="inline-flex px-3 py-1 text-xs font-bold rounded-full" [class]="statusClass(a.status)">
+                  {{ a.status }}
+                </span>
+
+                <!-- Lihat E-Tiket Button (Only if status is APPROVED or PAID) -->
+                <button *ngIf="a.status === 'APPROVED' || a.status === 'PAID'"
+                        (click)="viewTicket(a)"
+                        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 active:scale-[0.98] rounded-full transition-all border border-slate-200 shadow-sm cursor-pointer"
+                        title="Lihat E-Tiket">
+                  <i class="bi bi-eye"></i>
+                  <span>Lihat E-Tiket</span>
+                </button>
+
+                <!-- Beri Rating Button (Only if status is COMPLETED) -->
+                <ng-container *ngIf="a.status === 'COMPLETED'">
+                  <button *ngIf="!hasBeenRated(a.id)"
+                          [disabled]="!a.hasMedicalRecord"
+                          (click)="openRatingModal(a)"
+                          class="px-2.5 py-1 text-[11px] font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed rounded transition-all shadow-sm"
+                          [title]="a.hasMedicalRecord ? 'Berikan Ulasan' : 'Rating terkunci sampai rekam medis diisi oleh Dokter'">
+                    Beri Rating
+                  </button>
+                  <span *ngIf="hasBeenRated(a.id)" class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-amber-50 border border-amber-100 text-xs text-amber-600 font-bold">
+                    <i class="bi bi-star-fill text-amber-400"></i> {{ getRatingValue(a.id) }}/5
+                  </span>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Rating Modal -->
+  <div *ngIf="showRatingModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-100 rounded-card-lg shadow-card-lg max-w-md w-full p-6 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="font-extrabold text-slate-900 text-base">Ulasan & Rating Dokter</h3>
+        <button (click)="closeRatingModal()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="space-y-5">
+        <!-- Rating Stars -->
+        <div class="text-center space-y-2">
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Berikan Bintang</label>
+          <div class="flex items-center justify-center gap-2 text-3xl text-amber-400">
+            <button *ngFor="let star of [1,2,3,4,5]" (click)="selectRatingValue(star)" type="button" class="focus:outline-none transition-all hover:scale-110">
+              <i class="bi" [class.bi-star-fill]="star <= ratingValue" [class.bi-star]="star > ratingValue"></i>
+            </button>
+          </div>
+          <p class="text-xs text-slate-500 font-medium" *ngIf="ratingValue > 0">
+            {{ ratingValue }} Bintang - {{ ratingValue === 5 ? 'Sangat Puas' : (ratingValue === 4 ? 'Puas' : (ratingValue === 3 ? 'Cukup' : (ratingValue === 2 ? 'Kurang Puas' : 'Sangat Kurang'))) }}
+          </p>
+        </div>
+
+        <!-- Ulasan -->
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Ulasan Singkat</label>
+          <textarea [(ngModel)]="reviewText" rows="3" maxlength="500" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all resize-none" placeholder="Bagaimana pengalaman konsultasi Anda dengan dokter ini? (maks 500 karakter)"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3 justify-end pt-4 border-t border-slate-100">
+        <button (click)="closeRatingModal()" type="button" class="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-bold text-xs rounded-lg transition-all">
+          Batal
+        </button>
+        <button (click)="submitRating()" [disabled]="submittingRating || ratingValue === 0" type="button" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ submittingRating ? 'Mengirim...' : 'Kirim Ulasan' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DIALOG E-TIKET -->
+  <div *ngIf="showTicketModal && selectedTicket" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Bagian Atas Tiket -->
+      <div class="bg-gradient-to-br from-blue-700 to-blue-600 text-white p-8 text-center space-y-3 relative">
+        <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto shadow-inner text-white text-3xl">
+          <i class="bi bi-ticket-perforated"></i>
+        </div>
+        <div>
+          <h4 class="text-lg font-black tracking-tight">E-TIKET RESERVASI</h4>
+          <p class="text-blue-100 text-xs font-bold uppercase tracking-wider">Status: TERBIT (APPROVED)</p>
+        </div>
+        <button (click)="closeTicketModal()" class="absolute right-6 top-6 text-white/80 hover:text-white transition-colors">
+          <i class="bi bi-x-lg text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Tiket Connector (Garis sobek) -->
+      <div class="flex justify-between items-center px-6 bg-slate-50 relative h-6 my-[-3px]">
+        <div class="w-6 h-6 rounded-full bg-slate-900 absolute left-[-12px]"></div>
+        <div class="w-full border-t-2 border-dashed border-slate-300"></div>
+        <div class="w-6 h-6 rounded-full bg-slate-900 absolute right-[-12px]"></div>
+      </div>
+
+      <!-- Detail Tiket -->
+      <div class="p-6 bg-slate-50 text-center space-y-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left space-y-4">
+          <div>
+            <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Nomor Tiket</span>
+            <span class="text-sm font-extrabold text-slate-900">{{ ticketBarcode }}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Dokter</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ getDoctorName(selectedTicket.doctorId) }}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Spesialisasi</span>
+              <span class="text-xs font-bold text-blue-600">{{ getDoctorSpecialization(selectedTicket.doctorId) }}</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Tanggal</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ selectedTicket.appointmentDate }}</span>
+            </div>
+            <div>
+              <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Jam Kunjungan</span>
+              <span class="text-xs font-extrabold text-slate-900">{{ selectedTicket.appointmentTime.substring(0, 5) }}</span>
+            </div>
+          </div>
+          <div *ngIf="selectedTicket.notes" class="pt-2 border-t border-slate-100">
+            <span class="block text-[10px] text-slate-400 font-extrabold uppercase">Catatan Keluhan</span>
+            <p class="text-xs text-slate-600 font-semibold italic">"{{ selectedTicket.notes }}"</p>
+          </div>
+        </div>
+
+        <!-- Barcode Simulasi -->
+        <div class="space-y-2">
+          <div class="bg-white p-4 rounded-2xl border border-slate-100 inline-block shadow-sm">
+            <!-- Representasi Barcode CSS Premium -->
+            <div class="flex items-center justify-center gap-1.5 h-12 w-48">
+              <span class="h-full bg-slate-950 w-1"></span>
+              <span class="h-full bg-slate-950 w-2"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1.5"></span>
+              <span class="h-full bg-slate-950 w-2.5"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1.5"></span>
+              <span class="h-full bg-slate-950 w-3"></span>
+              <span class="h-full bg-slate-950 w-0.5"></span>
+              <span class="h-full bg-slate-950 w-1"></span>
+              <span class="h-full bg-slate-950 w-2"></span>
+            </div>
+            <p class="text-[9px] text-slate-400 font-black tracking-widest mt-1">{{ ticketBarcode }}</p>
+          </div>
+          <p class="text-[10px] text-slate-400 font-semibold max-w-xs mx-auto">Tunjukkan barcode di atas kepada petugas resepsionis klinik saat kedatangan.</p>
+        </div>
+
+        <!-- Action Button -->
+        <button type="button" 
+                (click)="closeTicketModal()" 
+                class="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl transition-all flex items-center justify-center gap-2">
+          <span>Tutup Tiket</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>

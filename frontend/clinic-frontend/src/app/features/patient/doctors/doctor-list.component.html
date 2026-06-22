@@ -1,0 +1,60 @@
+<app-dashboard-layout title="Cari Dokter">
+  <!-- Search & Filter -->
+  <div class="bg-white border border-slate-100 rounded-card-lg shadow-card p-6 mb-8">
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div class="relative flex-1">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="bi bi-search"></i></span>
+        <input [(ngModel)]="searchTerm" (input)="filterDoctors()" type="text" class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all" placeholder="Cari dokter atau spesialisasi...">
+      </div>
+      <select [(ngModel)]="selectedSpecialization" (change)="filterDoctors()" class="px-4 py-3 bg-white border border-slate-200 rounded-input text-sm focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all min-w-[180px]">
+        <option value="">Semua Spesialisasi</option>
+        <option *ngFor="let spec of specializations" [value]="spec">{{ spec }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let _ of [1,2,3,4,5,6]" class="bg-white border border-slate-100 rounded-card-lg overflow-hidden shadow-card">
+      <div class="h-56 skeleton"></div>
+      <div class="p-6 space-y-4">
+        <div class="h-5 skeleton w-3/4"></div>
+        <div class="h-4 skeleton w-1/2"></div>
+        <div class="h-4 skeleton w-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && filteredDoctors.length === 0" class="text-center py-20">
+    <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i class="bi bi-search text-3xl text-slate-400"></i>
+    </div>
+    <h3 class="font-bold text-slate-900 mb-2">Dokter Tidak Ditemukan</h3>
+    <p class="text-sm text-slate-500">Coba ubah kata kunci pencarian atau filter spesialisasi.</p>
+  </div>
+
+  <!-- Doctor Grid -->
+  <div *ngIf="!loading && filteredDoctors.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div *ngFor="let doc of filteredDoctors" class="bg-white border border-slate-100 rounded-card-lg overflow-hidden shadow-card hover:shadow-card-hover transition-all group">
+      <div class="h-56 bg-gradient-to-br from-blue-100 to-sky-50 overflow-hidden">
+        <img [src]="getDoctorImageUrl(doc.profileImageUrl)" alt="{{ doc.fullName }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <h4 class="font-extrabold text-lg text-slate-900">{{ doc.fullName }}</h4>
+          <p class="text-xs text-blue-600 font-bold mt-1">{{ doc.specialization }}</p>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-slate-500 border-t border-slate-100 pt-4">
+          <span><i class="bi bi-briefcase text-blue-600 mr-1"></i> {{ doc.experienceYears || '-' }} thn</span>
+          <span><i class="bi bi-star-fill text-amber-500 mr-1"></i> {{ doc.averageRating ? (doc.averageRating | number:'1.1-1') : '0.0' }}</span>
+          <span class="ml-auto font-bold text-slate-900">Rp{{ (doc.consultationFee || 0) | number }}</span>
+        </div>
+        <div class="flex gap-3 pt-1">
+          <button (click)="viewDoctor(doc.id)" class="flex-1 py-2.5 text-xs font-bold text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-all">Lihat Profil</button>
+          <a [routerLink]="['/patient/appointments/create']" [queryParams]="{doctorId: doc.id}" class="flex-1 py-2.5 text-xs font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all text-center">Pesan Jadwal</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-dashboard-layout>
